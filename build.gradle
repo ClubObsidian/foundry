@@ -1,0 +1,32 @@
+plugins {
+	id 'java'
+	id 'com.github.johnrengelman.shadow' version '5.0.0'
+	id 'jacoco'
+	id 'eclipse'
+	id 'idea'
+}
+
+
+repositories {
+	flatDir { dirs 'libs'}
+	maven {
+		url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"
+	}
+	maven {
+		url = 'https://repo.spongepowered.org/maven'
+    }
+    mavenCentral()
+	maven { 
+    	url 'https://jitpack.io' 
+ 	}
+}
+
+shadowJar {
+	baseName = 'WonderGuard'
+	classifier = ''
+}
+
+dependencies {
+    compileOnly 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
+    compileOnly name: 'LuckPerms'
+}
