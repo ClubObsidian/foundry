@@ -1,0 +1,4 @@
+name: "Foundry"
+main: "com.clubobsidian.foundry.Foundry"
+version: 1.0.0
+author: [VirusTotal]
