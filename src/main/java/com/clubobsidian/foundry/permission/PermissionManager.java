@@ -1,12 +1,11 @@
 package com.clubobsidian.foundry.permission;
 
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -24,9 +23,9 @@ import com.clubobsidian.foundry.permission.plugin.LuckPermsUpdater;
 
 public final class PermissionManager implements Listener {
 
-	private Map<UUID, Collection<PermissionNode>> userPermissionCache;
+	private Map<UUID, Map<String, PermissionNode>> userPermissionCache;
 	private PermissionUpdater updater;
-	private PermissionManager()
+	public PermissionManager()
 	{
 		this.userPermissionCache = new HashMap<>();
 		this.updater = this.findUpdater();
@@ -35,21 +34,21 @@ public final class PermissionManager implements Listener {
 	public boolean hasPermission(String permission, Player player)
 	{
 		UUID uuid = player.getUniqueId();
-		Collection<PermissionNode> nodes = this.userPermissionCache.get(uuid);
+		Map<String, PermissionNode> nodes = this.userPermissionCache.get(uuid);
 		if(nodes == null)
 		{
-			nodes = new ArrayList<>();
+			nodes = new HashMap<>();
 			this.userPermissionCache.put(uuid, nodes);
 		}
 
-		for(PermissionNode node : nodes)
+		PermissionNode node = nodes.get(permission);
+		if(node != null)
 		{
-			if(node.getPermission().equals(permission))
-				return node.hasPermission();
+			return node.hasPermission();
 		}
 
 		boolean has = player.hasPermission(permission);
-		nodes.add(new PermissionNode(permission, has));
+		nodes.put(permission, new PermissionNode(permission, has));
 		return has;
 	}
 
@@ -84,16 +83,18 @@ public final class PermissionManager implements Listener {
 	{
 		Player player = event.getPlayer();
 		UUID uuid = player.getUniqueId();
-		Collection<PermissionNode> nodes = this.userPermissionCache.get(uuid);
+		Map<String, PermissionNode> nodes = this.userPermissionCache.get(uuid);
 		if(nodes != null)
 		{
-			Iterator<PermissionNode> it = nodes.iterator();
+			Iterator<Entry<String, PermissionNode>> it = nodes.entrySet().iterator();
 			while(it.hasNext())
 			{
-				PermissionNode next = it.next();
-				if(!player.hasPermission(next.getPermission()))
+				Entry<String, PermissionNode> next = it.next();
+				String permission = next.getKey();
+				PermissionNode node = next.getValue();
+				if(!player.hasPermission(permission))
 				{
-					next.setHasPermission(false);
+					node.setHasPermission(false);
 				}
 			}
 		}
