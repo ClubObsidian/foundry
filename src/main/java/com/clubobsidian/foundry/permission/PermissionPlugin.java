@@ -28,4 +28,5 @@ public abstract class PermissionPlugin {
 	
 	public abstract PermissionPlugin register();
 	public abstract boolean unregister();
+	public abstract boolean hasPermission(Player player, String permission);
 }
