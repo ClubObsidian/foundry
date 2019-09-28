@@ -6,10 +6,10 @@ import org.bukkit.entity.Player;
 import com.clubobsidian.foundry.permission.event.PermissionUpdateEvent;
 
 
-public abstract class PermissionUpdater {
+public abstract class PermissionPlugin {
 
 	private String pluginName;
-	public PermissionUpdater(String pluginName)
+	public PermissionPlugin(String pluginName)
 	{
 		this.pluginName = pluginName;
 	}
@@ -26,6 +26,6 @@ public abstract class PermissionUpdater {
 		.callEvent(new PermissionUpdateEvent(player));
 	}
 	
-	public abstract PermissionUpdater register();
+	public abstract PermissionPlugin register();
 	public abstract boolean unregister();
 }

@@ -18,13 +18,13 @@ import org.bukkit.plugin.Plugin;
 
 import com.clubobsidian.foundry.Foundry;
 import com.clubobsidian.foundry.permission.event.PermissionUpdateEvent;
-import com.clubobsidian.foundry.permission.plugin.LuckPermsUpdater;
+import com.clubobsidian.foundry.permission.plugin.LuckPermsPlugin;
 
 
 public final class PermissionManager implements Listener {
 
 	private Map<UUID, Map<String, PermissionNode>> userPermissionCache;
-	private PermissionUpdater updater;
+	private PermissionPlugin updater;
 	public PermissionManager()
 	{
 		this.userPermissionCache = new HashMap<>();
@@ -52,17 +52,17 @@ public final class PermissionManager implements Listener {
 		return has;
 	}
 
-	public PermissionUpdater getUpdater()
+	public PermissionPlugin getUpdater()
 	{
 		return this.updater;
 	}
 
-	private PermissionUpdater findUpdater()
+	private PermissionPlugin findUpdater()
 	{
-		List<PermissionUpdater> updaters = new ArrayList<>();
-		updaters.add(new LuckPermsUpdater());
+		List<PermissionPlugin> updaters = new ArrayList<>();
+		updaters.add(new LuckPermsPlugin());
 
-		for(PermissionUpdater updater : updaters)
+		for(PermissionPlugin updater : updaters)
 		{
 			Plugin plugin = Bukkit.getServer()
 					.getPluginManager()

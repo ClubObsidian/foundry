@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.clubobsidian.foundry.Foundry;
-import com.clubobsidian.foundry.permission.PermissionUpdater;
+import com.clubobsidian.foundry.permission.PermissionPlugin;
 
 import me.lucko.luckperms.LuckPerms;
 import me.lucko.luckperms.api.User;
@@ -14,16 +14,16 @@ import me.lucko.luckperms.api.event.EventBus;
 import me.lucko.luckperms.api.event.EventHandler;
 import me.lucko.luckperms.api.event.user.UserDataRecalculateEvent;
 
-public class LuckPermsUpdater extends PermissionUpdater {
+public class LuckPermsPlugin extends PermissionPlugin {
 
 	private EventHandler<UserDataRecalculateEvent> handler;
-	public LuckPermsUpdater() 
+	public LuckPermsPlugin() 
 	{
 		super("LuckPerms");
 	}
 
 	@Override
-	public PermissionUpdater register() 
+	public PermissionPlugin register() 
 	{
 		EventBus eventBus = LuckPerms.getApi().getEventBus();
 		this.handler = eventBus.subscribe(UserDataRecalculateEvent.class, event -> 
