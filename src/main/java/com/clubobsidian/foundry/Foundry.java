@@ -15,7 +15,14 @@ public class Foundry extends JavaPlugin {
 	{
 		instance = this;
 		this.permissionManager = new PermissionManager();
-		this.getLogger().info("Foundry is now enabled and waiting for registration!");
+		if(this.permissionManager.getPlugin() == null)
+		{
+			this.getPluginLoader().disablePlugin(this);
+		}
+		else
+		{
+			this.getLogger().info("Foundry is now enabled and waiting for registration!");
+		}
 	}
 	
 	public static Foundry get()

@@ -24,11 +24,11 @@ import com.clubobsidian.foundry.permission.plugin.LuckPermsPlugin;
 public final class PermissionManager implements Listener {
 
 	private Map<UUID, Map<String, PermissionNode>> userPermissionCache;
-	private PermissionPlugin updater;
+	private PermissionPlugin plugin;
 	public PermissionManager()
 	{
 		this.userPermissionCache = new HashMap<>();
-		this.updater = this.findUpdater();
+		this.plugin = this.findUpdater();
 	}
 
 	public boolean hasPermission(String permission, Player player)
@@ -52,9 +52,9 @@ public final class PermissionManager implements Listener {
 		return has;
 	}
 
-	public PermissionPlugin getUpdater()
+	public PermissionPlugin getPlugin()
 	{
-		return this.updater;
+		return this.plugin;
 	}
 
 	private PermissionPlugin findUpdater()
