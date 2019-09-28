@@ -31,7 +31,7 @@ public final class PermissionManager implements Listener {
 		this.plugin = this.findUpdater();
 	}
 
-	public boolean hasPermission(String permission, Player player)
+	public boolean hasPermission(Player player, String permission)
 	{
 		UUID uuid = player.getUniqueId();
 		Map<String, PermissionNode> nodes = this.userPermissionCache.get(uuid);
