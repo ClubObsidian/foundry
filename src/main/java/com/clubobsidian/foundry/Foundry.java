@@ -21,7 +21,7 @@ public class Foundry extends JavaPlugin {
 		}
 		else
 		{
-			this.getLogger().info("Foundry is now enabled and waiting for registration!");
+			this.getLogger().info("Foundry is now enabled!");
 		}
 	}
 	
