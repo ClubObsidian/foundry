@@ -22,7 +22,7 @@ repositories {
 }
 
 shadowJar {
-	baseName = 'WonderGuard'
+	baseName = 'foundry'
 	classifier = ''
 }
 
