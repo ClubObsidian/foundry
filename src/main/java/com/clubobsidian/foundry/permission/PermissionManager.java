@@ -16,7 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
-import com.clubobsidian.foundry.Foundry;
+import com.clubobsidian.foundry.FoundryPlugin;
 import com.clubobsidian.foundry.permission.event.PermissionUpdateEvent;
 import com.clubobsidian.foundry.permission.plugin.LuckPermsPlugin;
 
@@ -67,7 +67,7 @@ public final class PermissionManager implements Listener {
 			}
 		}
 
-		Foundry.get().getLogger().info("No permission updater can be found, permissions will only update on relog!");
+		FoundryPlugin.get().getLogger().info("No permission updater can be found, permissions will only update on relog!");
 		return null;
 	}
 

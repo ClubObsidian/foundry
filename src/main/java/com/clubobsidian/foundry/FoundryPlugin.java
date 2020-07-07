@@ -4,11 +4,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.clubobsidian.foundry.permission.PermissionManager;
 
-public class Foundry extends JavaPlugin {
+public class FoundryPlugin extends JavaPlugin {
 
-	private static Foundry instance;
+	private static FoundryPlugin instance;
 	
-	public static Foundry get() {
+	public static FoundryPlugin get() {
 		return instance;
 	}
 	

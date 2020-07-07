@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.clubobsidian.foundry.Foundry;
+import com.clubobsidian.foundry.FoundryPlugin;
 import com.clubobsidian.foundry.permission.PermissionPlugin;
 
 import me.lucko.luckperms.LuckPerms;
@@ -33,7 +33,7 @@ public class LuckPermsPlugin extends PermissionPlugin {
 		this.handler = eventBus.subscribe(UserDataRecalculateEvent.class, event -> {
 			User user = event.getUser();
 			UUID uuid = user.getUuid();
-			Bukkit.getScheduler().runTask(Foundry.get(), () -> {
+			Bukkit.getScheduler().runTask(FoundryPlugin.get(), () -> {
 				Player player = Bukkit.getServer().getPlayer(uuid);
 				if(player != null) {
 					this.updatePermissions(player);

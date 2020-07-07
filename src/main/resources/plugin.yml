@@ -1,4 +1,4 @@
 name: "Foundry"
-main: "com.clubobsidian.foundry.Foundry"
-version: 1.0.0
+main: "com.clubobsidian.foundry.FoundryPlugin"
+version: 2.0.0
 author: VirusTotal
