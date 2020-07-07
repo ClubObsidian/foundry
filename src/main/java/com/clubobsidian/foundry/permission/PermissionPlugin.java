@@ -9,18 +9,16 @@ import com.clubobsidian.foundry.permission.event.PermissionUpdateEvent;
 public abstract class PermissionPlugin {
 
 	private String pluginName;
-	public PermissionPlugin(String pluginName)
-	{
+	
+	public PermissionPlugin(String pluginName) {
 		this.pluginName = pluginName;
 	}
 	
-	public String getPluginName()
-	{
+	public String getPluginName() {
 		return this.pluginName;
 	}
 	
-	public void updatePermissions(Player player)
-	{
+	public void updatePermissions(Player player) {
 		Bukkit.getServer()
 		.getPluginManager()
 		.callEvent(new PermissionUpdateEvent(player));

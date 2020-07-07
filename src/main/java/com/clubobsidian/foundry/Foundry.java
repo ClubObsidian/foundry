@@ -8,30 +8,24 @@ public class Foundry extends JavaPlugin {
 
 	private static Foundry instance;
 	
+	public static Foundry get() {
+		return instance;
+	}
+	
 	private PermissionManager permissionManager;
 	
 	@Override
-	public void onEnable()
-	{
+	public void onEnable() {
 		instance = this;
 		this.permissionManager = new PermissionManager();
-		if(this.permissionManager.getPlugin() == null)
-		{
+		if(this.permissionManager.getPlugin() == null) {
 			this.getPluginLoader().disablePlugin(this);
-		}
-		else
-		{
+		} else {
 			this.getLogger().info("Foundry is now enabled!");
 		}
 	}
 	
-	public static Foundry get()
-	{
-		return instance;
-	}
-	
-	public PermissionManager getPermissionManager()
-	{
+	public PermissionManager getPermissionManager() {
 		return this.permissionManager;
 	}
 }

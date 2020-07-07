@@ -21,25 +21,21 @@ import me.lucko.luckperms.api.event.user.UserDataRecalculateEvent;
 public class LuckPermsPlugin extends PermissionPlugin {
 
 	private EventHandler<UserDataRecalculateEvent> handler;
-	public LuckPermsPlugin() 
-	{
+	
+	public LuckPermsPlugin() {
 		super("LuckPerms");
 	}
 
 	@Override
-	public PermissionPlugin register() 
-	{
+	public PermissionPlugin register() {
 		LuckPermsApi api = LuckPerms.getApi();
 		EventBus eventBus = api.getEventBus();
-		this.handler = eventBus.subscribe(UserDataRecalculateEvent.class, event -> 
-		{
+		this.handler = eventBus.subscribe(UserDataRecalculateEvent.class, event -> {
 			User user = event.getUser();
 			UUID uuid = user.getUuid();
-			Bukkit.getScheduler().runTask(Foundry.get(), () ->
-			{
+			Bukkit.getScheduler().runTask(Foundry.get(), () -> {
 				Player player = Bukkit.getServer().getPlayer(uuid);
-				if(player != null)
-				{
+				if(player != null) {
 					this.updatePermissions(player);
 				}
 			});
@@ -48,14 +44,12 @@ public class LuckPermsPlugin extends PermissionPlugin {
 	}
 
 	@Override
-	public boolean unregister() 
-	{
+	public boolean unregister() {
 		return this.handler.unregister();
 	}
 
 	@Override
-	public boolean hasPermission(Player player, String permission) 
-	{
+	public boolean hasPermission(Player player, String permission) {
 		UUID uuid = player.getUniqueId();
 		LuckPermsApi api = LuckPerms.getApi();
 		User user = api.getUser(uuid);

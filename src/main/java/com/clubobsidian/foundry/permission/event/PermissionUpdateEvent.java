@@ -9,24 +9,21 @@ public class PermissionUpdateEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	
 	private Player player;
-	public PermissionUpdateEvent(Player player)
-	{
+	
+	public PermissionUpdateEvent(Player player) {
 		this.player = player;
 	}
 	
-	public Player getPlayer()
-	{
+	public Player getPlayer() {
 		return this.player;
 	}
 
 	@Override
-	public HandlerList getHandlers() 
-	{
+	public HandlerList getHandlers() {
 		return handlers;
 	}
 	
-	public static HandlerList getHandlerList() 
-	{
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 }
