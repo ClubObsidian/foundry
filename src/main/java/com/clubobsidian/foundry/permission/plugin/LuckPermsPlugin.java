@@ -4,23 +4,24 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.clubobsidian.foundry.FoundryPlugin;
 import com.clubobsidian.foundry.permission.PermissionPlugin;
 
-import me.lucko.luckperms.LuckPerms;
-import me.lucko.luckperms.api.Contexts;
-import me.lucko.luckperms.api.LuckPermsApi;
-import me.lucko.luckperms.api.User;
-import me.lucko.luckperms.api.caching.PermissionData;
-import me.lucko.luckperms.api.context.ContextManager;
-import me.lucko.luckperms.api.event.EventBus;
-import me.lucko.luckperms.api.event.EventHandler;
-import me.lucko.luckperms.api.event.user.UserDataRecalculateEvent;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.cacheddata.CachedPermissionData;
+import net.luckperms.api.context.ContextManager;
+import net.luckperms.api.context.ImmutableContextSet;
+import net.luckperms.api.event.EventBus;
+import net.luckperms.api.event.EventSubscription;
+import net.luckperms.api.event.user.UserDataRecalculateEvent;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.query.QueryOptions;
 
 public class LuckPermsPlugin extends PermissionPlugin {
 
-	private EventHandler<UserDataRecalculateEvent> handler;
+	private EventSubscription<UserDataRecalculateEvent> handler;
 	
 	public LuckPermsPlugin() {
 		super("LuckPerms");
@@ -28,11 +29,11 @@ public class LuckPermsPlugin extends PermissionPlugin {
 
 	@Override
 	public PermissionPlugin register() {
-		LuckPermsApi api = LuckPerms.getApi();
+		LuckPerms api = this.getLuckPerms();
 		EventBus eventBus = api.getEventBus();
 		this.handler = eventBus.subscribe(UserDataRecalculateEvent.class, event -> {
 			User user = event.getUser();
-			UUID uuid = user.getUuid();
+			UUID uuid = user.getUniqueId();
 			Bukkit.getScheduler().runTask(FoundryPlugin.get(), () -> {
 				Player player = Bukkit.getServer().getPlayer(uuid);
 				if(player != null) {
@@ -45,17 +46,23 @@ public class LuckPermsPlugin extends PermissionPlugin {
 
 	@Override
 	public boolean unregister() {
-		return this.handler.unregister();
+		this.handler.close();
+		return true;
 	}
 
 	@Override
 	public boolean hasPermission(Player player, String permission) {
 		UUID uuid = player.getUniqueId();
-		LuckPermsApi api = LuckPerms.getApi();
-		User user = api.getUser(uuid);
+		LuckPerms api = this.getLuckPerms();
+		User user = api.getUserManager().getUser(uuid);
 		ContextManager contextManager = api.getContextManager();
-		Contexts contexts = contextManager.lookupApplicableContexts(user).orElseGet(contextManager::getStaticContexts);
-		PermissionData permissionData = user.getCachedData().getPermissionData(contexts);
-		return permissionData.getPermissionValue(permission).asBoolean();
+		ImmutableContextSet contexts = contextManager.getContext(user).orElseGet(contextManager::getStaticContext);
+		CachedPermissionData permissionData = user.getCachedData().getPermissionData(QueryOptions.contextual(contexts));
+		return permissionData.checkPermission(permission).asBoolean();
+	}
+
+	private LuckPerms getLuckPerms() {
+		RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+		return provider.getProvider();
 	}
 }

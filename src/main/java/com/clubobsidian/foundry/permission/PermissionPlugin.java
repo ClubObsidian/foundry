@@ -3,8 +3,7 @@ package com.clubobsidian.foundry.permission;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.clubobsidian.foundry.permission.event.PermissionUpdateEvent;
-
+import com.clubobsidian.foundry.permission.event.PermissionRecalculateEvent;
 
 public abstract class PermissionPlugin {
 
@@ -21,7 +20,7 @@ public abstract class PermissionPlugin {
 	public void updatePermissions(Player player) {
 		Bukkit.getServer()
 		.getPluginManager()
-		.callEvent(new PermissionUpdateEvent(player));
+		.callEvent(new PermissionRecalculateEvent(player));
 	}
 	
 	public abstract PermissionPlugin register();

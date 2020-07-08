@@ -4,11 +4,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
-public class PermissionUpdateEvent extends PlayerEvent {
+public class PermissionRecalculateEvent extends PlayerEvent {
 
 	private static final HandlerList handlers = new HandlerList();
 	
-	public PermissionUpdateEvent(Player player) {
+	public PermissionRecalculateEvent(Player player) {
 		super(player);
 	}
 

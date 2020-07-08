@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.clubobsidian.foundry.FoundryPlugin;
+import com.clubobsidian.foundry.permission.event.PermissionRecalculateEvent;
 import com.clubobsidian.foundry.permission.event.PermissionUpdateEvent;
 import com.clubobsidian.foundry.permission.plugin.LuckPermsPlugin;
 
@@ -72,7 +73,7 @@ public final class PermissionManager implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPermissionUpdate(PermissionUpdateEvent event) {
+	public void onPermissionUpdate(PermissionRecalculateEvent event) {
 		Player player = event.getPlayer();
 		UUID uuid = player.getUniqueId();
 		Map<String, PermissionNode> nodes = this.userPermissionCache.get(uuid);
@@ -87,6 +88,8 @@ public final class PermissionManager implements Listener {
 				}
 			}
 		}
+		PermissionUpdateEvent permissionEvent = new PermissionUpdateEvent(player);
+		Bukkit.getServer().getPluginManager().callEvent(permissionEvent);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
