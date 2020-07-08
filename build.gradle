@@ -1,14 +1,33 @@
+import org.apache.tools.ant.filters.ReplaceTokens;
+
 plugins {
 	id 'java'
 	id 'com.github.johnrengelman.shadow' version '5.0.0'
 	id 'jacoco'
 	id 'eclipse'
 	id 'idea'
+	id 'maven'
 }
 
+group = 'com.clubobsidian'
+version = '2.0.0'
+
+processResources {
+	from(sourceSets.main.resources) {
+		include 'plugin.yml'
+		filter(ReplaceTokens, tokens: ['VERSION' : project.version])
+	}
+}
 
 repositories {
 	flatDir { dirs 'libs'}
+	maven {
+		url "https://maven.clubobsidian.dev/repository/maven-public/"
+		credentials {
+			username nexusUsername
+			password nexusPassword
+		}
+	}
 	maven {
 		url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"
 	}
@@ -21,9 +40,22 @@ repositories {
  	}
 }
 
+uploadShadow {
+    repositories {
+        mavenDeployer {
+            repository(url: "${nexusUrl}/repository/maven-releases/") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+            snapshotRepository(url: "${nexusUrl}/repository/maven-snapshots") {
+                authentication(userName: nexusUsername, password: nexusPassword)
+            }
+        }
+    }
+}
+
 shadowJar {
 	baseName = 'foundry'
-	classifier = ''
+	classifier = null
 }
 
 dependencies {
