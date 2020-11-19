@@ -22,13 +22,6 @@ processResources {
 repositories {
 	flatDir { dirs 'libs'}
 	maven {
-		url "https://maven.clubobsidian.dev/repository/maven-public/"
-		credentials {
-			username nexusUsername
-			password nexusPassword
-		}
-	}
-	maven {
 		url "https://hub.spigotmc.org/nexus/content/repositories/snapshots"
 	}
 	maven {
@@ -40,17 +33,9 @@ repositories {
  	}
 }
 
-uploadShadow {
-    repositories {
-        mavenDeployer {
-            repository(url: "${nexusUrl}/repository/maven-releases/") {
-                authentication(userName: nexusUsername, password: nexusPassword)
-            }
-            snapshotRepository(url: "${nexusUrl}/repository/maven-snapshots") {
-                authentication(userName: nexusUsername, password: nexusPassword)
-            }
-        }
-    }
+configurations {
+  shade
+  compile.extendsFrom shade
 }
 
 shadowJar {
