@@ -23,6 +23,6 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v1
       with:
-        name: dynamicgui
+        name: foundry
         # Directory containing files to upload
         path: build/libs
