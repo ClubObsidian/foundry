@@ -51,6 +51,12 @@ local.properties
 .project
 .classpath
 
+# Idea
+.idea/
+*.iml
+*.ipr
+*.iws
+
 # External tool builders
 .externalToolBuilders/
 
