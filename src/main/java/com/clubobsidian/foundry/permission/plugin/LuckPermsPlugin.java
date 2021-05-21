@@ -55,10 +55,7 @@ public class LuckPermsPlugin extends PermissionPlugin {
 		UUID uuid = player.getUniqueId();
 		LuckPerms api = this.getLuckPerms();
 		User user = api.getUserManager().getUser(uuid);
-		ContextManager contextManager = api.getContextManager();
-		ImmutableContextSet contexts = contextManager.getContext(user).orElseGet(contextManager::getStaticContext);
-		CachedPermissionData permissionData = user.getCachedData().getPermissionData(QueryOptions.contextual(contexts));
-		return permissionData.checkPermission(permission).asBoolean();
+		return user.getCachedData().getPermissionData().checkPermission(permission).asBoolean();
 	}
 
 	private LuckPerms getLuckPerms() {

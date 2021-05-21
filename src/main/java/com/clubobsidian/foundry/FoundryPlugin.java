@@ -21,6 +21,7 @@ public class FoundryPlugin extends JavaPlugin {
 		if(this.permissionManager.getPlugin() == null) {
 			this.getPluginLoader().disablePlugin(this);
 		} else {
+			this.getServer().getPluginManager().registerEvents(this.permissionManager, this);
 			this.getLogger().info("Foundry is now enabled!");
 		}
 	}

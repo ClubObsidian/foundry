@@ -1,5 +1,5 @@
 name: "Foundry"
 main: "com.clubobsidian.foundry.FoundryPlugin"
-version: @VERSION@
+version: ${pluginVersion}
 author: VirusTotal
 softdepend: ["LuckPerms"]

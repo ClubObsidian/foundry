@@ -39,13 +39,11 @@ public final class PermissionManager implements Listener {
 			nodes = new HashMap<>();
 			this.userPermissionCache.put(uuid, nodes);
 		}
-
 		PermissionNode node = nodes.get(permission);
 		if(node != null) {
 			return node.hasPermission();
 		}
-
-		boolean has = player.hasPermission(permission);
+		boolean has = this.plugin.hasPermission(player, permission);
 		nodes.put(permission, new PermissionNode(permission, has));
 		return has;
 	}
@@ -57,17 +55,14 @@ public final class PermissionManager implements Listener {
 	private PermissionPlugin findUpdater() {
 		Collection<PermissionPlugin> updaters = new ArrayList<>();
 		updaters.add(new LuckPermsPlugin());
-
 		for(PermissionPlugin updater : updaters) {
 			Plugin plugin = Bukkit.getServer()
 					.getPluginManager()
 					.getPlugin(updater.getPluginName());
-
 			if(plugin != null) {
 				return updater.register();
 			}
 		}
-
 		FoundryPlugin.get().getLogger().info("No permission updater can be found, permissions will only update on relog!");
 		return null;
 	}
@@ -83,8 +78,9 @@ public final class PermissionManager implements Listener {
 				Entry<String, PermissionNode> next = it.next();
 				String permission = next.getKey();
 				PermissionNode node = next.getValue();
-				if(!player.hasPermission(permission)) {
-					node.setHasPermission(false);
+				boolean hasPermission = this.plugin.hasPermission(player, permission);
+				if(hasPermission != node.hasPermission()) {
+					node.setHasPermission(hasPermission);
 				}
 			}
 		}
