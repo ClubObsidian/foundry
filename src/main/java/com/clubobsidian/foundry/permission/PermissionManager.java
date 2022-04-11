@@ -2,11 +2,11 @@ package com.clubobsidian.foundry.permission;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,11 +24,10 @@ import com.clubobsidian.foundry.permission.plugin.LuckPermsPlugin;
 
 public final class PermissionManager implements Listener {
 
-	private Map<UUID, Map<String, PermissionNode>> userPermissionCache;
-	private PermissionPlugin plugin;
+	private final Map<UUID, Map<String, PermissionNode>> userPermissionCache = new ConcurrentHashMap<>();
+	private final PermissionPlugin plugin;
 	
 	public PermissionManager() {
-		this.userPermissionCache = new HashMap<>();
 		this.plugin = this.findUpdater();
 	}
 
@@ -36,7 +35,7 @@ public final class PermissionManager implements Listener {
 		UUID uuid = player.getUniqueId();
 		Map<String, PermissionNode> nodes = this.userPermissionCache.get(uuid);
 		if(nodes == null) {
-			nodes = new HashMap<>();
+			nodes = new ConcurrentHashMap<>();
 			this.userPermissionCache.put(uuid, nodes);
 		}
 		PermissionNode node = nodes.get(permission);
