@@ -1,19 +1,22 @@
 plugins {
 	id 'java'
-	id 'com.github.johnrengelman.shadow' version '5.0.0'
-	id 'jacoco'
+	id 'com.github.johnrengelman.shadow' version '7.1.2'
 	id 'eclipse'
 	id 'idea'
-	id 'maven'
 }
 
 group = 'com.clubobsidian'
-version = '2.0.2'
+version = '3.0.0'
 
 processResources {
-	from(sourceSets.main.resources) {
-		include 'plugin.yml'
+	filesMatching('plugin.yml') {
 		expand 'pluginVersion': project.version
+	}
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(11)
 	}
 }
 
@@ -31,17 +34,12 @@ repositories {
  	}
 }
 
-configurations {
-  shade
-  compile.extendsFrom shade
-}
-
 shadowJar {
-	baseName = 'foundry'
-	classifier = null
+	archiveBaseName.set('foundry')
+	archiveClassifier.set('')
 }
 
 dependencies {
-    compileOnly 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
-    compileOnly name: 'LuckPerms'
+    compileOnly('org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT')
+    compileOnly(name: 'LuckPerms')
 }

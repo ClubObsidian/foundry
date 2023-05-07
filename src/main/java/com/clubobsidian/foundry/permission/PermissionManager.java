@@ -1,96 +1,14 @@
 package com.clubobsidian.foundry.permission;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
-
-import com.clubobsidian.foundry.FoundryPlugin;
-import com.clubobsidian.foundry.permission.event.PermissionRecalculateEvent;
-import com.clubobsidian.foundry.permission.event.PermissionUpdateEvent;
-import com.clubobsidian.foundry.permission.plugin.LuckPermsPlugin;
 
 
-public final class PermissionManager implements Listener {
+public interface PermissionManager extends Listener {
 
-	private final Map<UUID, Map<String, PermissionNode>> userPermissionCache = new ConcurrentHashMap<>();
-	private final PermissionPlugin plugin;
-	
-	public PermissionManager() {
-		this.plugin = this.findUpdater();
-	}
 
-	public boolean hasPermission(Player player, String permission) {
-		UUID uuid = player.getUniqueId();
-		Map<String, PermissionNode> nodes = this.userPermissionCache.get(uuid);
-		if(nodes == null) {
-			nodes = new ConcurrentHashMap<>();
-			this.userPermissionCache.put(uuid, nodes);
-		}
-		PermissionNode node = nodes.get(permission);
-		if(node != null) {
-			return node.hasPermission();
-		}
-		boolean has = this.plugin.hasPermission(player, permission);
-		nodes.put(permission, new PermissionNode(permission, has));
-		return has;
-	}
+	boolean hasPermission(Player player, String permission);
 
-	public PermissionPlugin getPlugin() {
-		return this.plugin;
-	}
+	PermissionPlugin getPlugin();
 
-	private PermissionPlugin findUpdater() {
-		Collection<PermissionPlugin> updaters = new ArrayList<>();
-		updaters.add(new LuckPermsPlugin());
-		for(PermissionPlugin updater : updaters) {
-			Plugin plugin = Bukkit.getServer()
-					.getPluginManager()
-					.getPlugin(updater.getPluginName());
-			if(plugin != null) {
-				return updater.register();
-			}
-		}
-		FoundryPlugin.get().getLogger().info("No permission updater can be found, permissions will only update on relog!");
-		return null;
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPermissionUpdate(PermissionRecalculateEvent event) {
-		Player player = event.getPlayer();
-		UUID uuid = player.getUniqueId();
-		Map<String, PermissionNode> nodes = this.userPermissionCache.get(uuid);
-		if(nodes != null) {
-			Iterator<Entry<String, PermissionNode>> it = nodes.entrySet().iterator();
-			while(it.hasNext()) {
-				Entry<String, PermissionNode> next = it.next();
-				String permission = next.getKey();
-				PermissionNode node = next.getValue();
-				boolean hasPermission = this.plugin.hasPermission(player, permission);
-				if(hasPermission != node.hasPermission()) {
-					node.setHasPermission(hasPermission);
-				}
-			}
-		}
-		PermissionUpdateEvent permissionEvent = new PermissionUpdateEvent(player);
-		Bukkit.getServer().getPluginManager().callEvent(permissionEvent);
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void permissionCacheCleanup(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		UUID uuid = player.getUniqueId();
-		this.userPermissionCache.remove(uuid);
-	}
 }
